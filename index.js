@@ -13,6 +13,22 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@clu
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+async function run() {
+    try {
+        const mobileCompanyCollection = client.db('secondHandMobile').collection('mobiles');
+        const mobilesCollection = client.db('secondHandMobile').collection('mobiles');
+
+        app.get('/category', async (req, res) => {
+            const query = {};
+            const mobiles = await mobileCompanyCollection.find(query).toArray();
+            res.send(mobiles);
+        })
+
+    }
+    finally {
+
+    }
+}
 
 app.get('/', async (req, res) => {
     res.send('second hand mobile portal server is running');
