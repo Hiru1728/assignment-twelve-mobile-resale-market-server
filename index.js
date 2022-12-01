@@ -15,20 +15,56 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 async function run() {
     try {
-        const mobileCompanyCollection = client.db('secondHandMobile').collection('mobiles');
-        const mobilesCollection = client.db('secondHandMobile').collection('mobiles');
+        const mobileCompanyCollection = client.db('secondHandMobile').collection('categoryMobile');
+        const mobilesCollection = client.db('secondHandMobile').collection('subcategoryMobiles');
+        const bookingCollection = client.db('secondHandMobile').collection('bookings');
+        const userCollection = client.db('secondHandMobile').collection('users');
+        const productCollection = client.db('secondHandMobile').collection('products');
 
         app.get('/category', async (req, res) => {
             const query = {};
             const mobiles = await mobileCompanyCollection.find(query).toArray();
             res.send(mobiles);
+        });
+
+        app.get('/category/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { categoryId: id };
+            const mobile = await mobilesCollection.find(query).toArray();
+            res.send(mobile);
+        });
+
+        app.post('/booking', async (req, res) => {
+            const booking = req.body;
+            const result = await bookingCollection.insertOne(booking);
+            res.send(result);
+        });
+
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = await userCollection.insertOne(user);
+            res.send(result);
+        });
+
+        app.get('/products', async (req, res) => {
+            const query = {};
+            const products = await productCollection.find(query).toArray();
+            res.send(products);
         })
+
+        app.post('/products', async (req, res) => {
+            const product = req.body;
+            const result = await productCollection.insertOne(product);
+            res.send(result);
+        })
+
 
     }
     finally {
 
     }
 }
+run().catch(error => console.log(error))
 
 app.get('/', async (req, res) => {
     res.send('second hand mobile portal server is running');
