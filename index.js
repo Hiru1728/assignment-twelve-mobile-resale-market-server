@@ -55,6 +55,14 @@ async function run() {
             res.send(users);
         })
 
+
+        app.get('/users/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const users = await userCollection.find(query).toArray();
+            res.send(users);
+        })
+
         app.put('/users/admin/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) }
@@ -93,8 +101,12 @@ async function run() {
             res.send(result);
         })
 
-
-
+        app.delete('/products/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const result = await productCollection.deleteOne(filter);
+            res.send(result);
+        })
 
     }
     finally {
