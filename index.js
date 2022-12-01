@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 const app = express();
 require('dotenv').config();
@@ -34,11 +34,19 @@ async function run() {
             res.send(mobile);
         });
 
+
+
         app.post('/booking', async (req, res) => {
             const booking = req.body;
             const result = await bookingCollection.insertOne(booking);
             res.send(result);
         });
+
+        app.get('/users', async (req, res) => {
+            const query = {};
+            const users = await userCollection.find(query).toArray();
+            res.send(users);
+        })
 
         app.post('/users', async (req, res) => {
             const user = req.body;
@@ -46,17 +54,14 @@ async function run() {
             res.send(result);
         });
 
-        app.get('/products', async (req, res) => {
-            const query = {};
-            const products = await productCollection.find(query).toArray();
-            res.send(products);
-        })
 
         app.post('/products', async (req, res) => {
             const product = req.body;
             const result = await productCollection.insertOne(product);
             res.send(result);
         })
+
+
 
 
     }
